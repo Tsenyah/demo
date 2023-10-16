@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demoapp
+  template:
+    metadata:
+      labels:
+        app: demoapp
+        apptype: test
+    spec:
+      containers:
+      - name: demoapp
+        image: flowwtech/demo:1.0.2
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp2
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: demoapp2
+  template:
+    metadata:
+      labels:
+        app: demoapp2
+        apptype: test
+    spec:
+      containers:
+      - name: demoapp
+        image: flowwtech/demo:1.0.3
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demoserve
+spec:
+  selector:
+    apptype: test
+  ports:
+  - port: 8080
+    targetPort: 3000
