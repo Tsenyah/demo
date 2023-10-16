@@ -9,7 +9,7 @@ kind: Deployment
 metadata:
   name: demoapp
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: demoapp
@@ -34,7 +34,7 @@ kind: Deployment
 metadata:
   name: demoapp2
 spec:
-  replicas: 0
+  replicas: 2
   selector:
     matchLabels:
       app: demoapp2
