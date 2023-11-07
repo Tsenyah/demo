@@ -1,5 +1,6 @@
 name: GHA BUILD
-
+# run desctiption
+run-name: trying to build an image using gha
 on:
   push:
     branches: [ "main" ]
