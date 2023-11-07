@@ -62,8 +62,8 @@ jobs:
        
         with:
           context: .
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=$env.IMAGE_NAME-cache
+          cache-to: type=registry,ref=$env.IMAGE_NAME-Cache,mode=max
           platforms: linux/amd64
           push: false
           tags: tomsenyah/dicicd:${{env.IMAGE_TAG}}
