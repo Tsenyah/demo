@@ -8,6 +8,11 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  IMAGE_NAME: tomsenyah/dicicd
+
+  IMAGE_TAG: 1.0.${{github.run_number}}
+
 jobs:
 
   build:
@@ -35,11 +40,13 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
+      
+ 
 
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: tomsenyah/dicicd:${{ github.sha }}
+          context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: user/app:latest
+          tags: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
