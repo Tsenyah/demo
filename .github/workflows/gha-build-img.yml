@@ -7,11 +7,14 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+  
 
 env:
   IMAGE_NAME: tomsenyah/dicicd
 
   IMAGE_TAG: 1.0.${{github.run_number}}
+
+  BUILD_CONDT: ${{github.event_name}}
 
 jobs:
 
@@ -42,11 +45,21 @@ jobs:
         uses: docker/setup-buildx-action@v1
       
  
-
-      - name: Build and push
+      - name: push command run
+        
         uses: docker/build-push-action@v5
+        if: github.event == 'push'
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: tomsenyah/dicicd:${{ github.sha }}
+          tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
+
+      - name: pr command run
+        uses: docker/build-push-action@v5
+        if: github.event != 'Pull-Request'
+        with:
+          context: .
+          platforms: arm32v6,linux/arm64
+          push: true
+          tags: tomsenyah/dicicd:${{env.IMAGE_TAG}}
