@@ -62,7 +62,7 @@ jobs:
        
         with:
           context: .
-          cache-from: type=registry
+          cache-from: type=registry,ref=tomsenyah/dicicd:${{env.IMAGE_TAG}}
           cache-to: type=registry,mode=max
           platforms: linux/amd64
           push: true
