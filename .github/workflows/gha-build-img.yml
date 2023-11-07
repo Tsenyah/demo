@@ -46,20 +46,25 @@ jobs:
       
  
       - name: push command run
-        
         uses: docker/build-push-action@v5
-        if: github.event == 'push'
+        if: github.event_name == 'push'
         with:
           context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
           push: true
           tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
 
       - name: pr command run
         uses: docker/build-push-action@v5
-        if: github.event != 'Pull-Request'
+        if: github.event_name != 'Pull-Request'
+       
         with:
           context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           platforms: linux/amd64
           push: true
           tags: tomsenyah/dicicd:${{env.IMAGE_TAG}}
+        
