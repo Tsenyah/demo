@@ -60,6 +60,6 @@ jobs:
         if: github.event != 'Pull-Request'
         with:
           context: .
-          platforms: linux/arm32v6,linux/arm64
+          platforms: linux/amd68
           push: true
           tags: tomsenyah/dicicd:${{env.IMAGE_TAG}}
