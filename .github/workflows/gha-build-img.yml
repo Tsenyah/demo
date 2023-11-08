@@ -46,9 +46,9 @@ jobs:
       - name: Get Github Event type
         run: |
           if [ ${{ github.event_name }} == 'pull_request' ]; then
-            echo "This is a pull request event"
+            [${{env.BUILD_CONDT}} = linux/arm64]
           elif [ ${{ github.event_name }} == 'push' ]; then
-            echo "This is a push event"
+            [${{env.BUILD_CONDT}} = linux/amd64,linux/arm64]
           else
             echo "This is an unknown event"
           fi
