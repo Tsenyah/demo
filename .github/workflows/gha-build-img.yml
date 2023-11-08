@@ -45,10 +45,12 @@ jobs:
       
       - name: Get Github Event type
         run: |
-          [if ${{github.event_name}} == 'push']; then
-          ${{env.BUILD_CONDT}} = linux/amd64,linux/arm64
-          elif [${{github.event_name}} == 'pull_request']; then
-          ${{env.BUILD_CONDT}} = linux/amd64,linux/arm64
+          if [ ${{ github.event_name }} == 'pull_request' ]; then
+            echo "This is a pull request event"
+          elif [ ${{ github.event_name }} == 'push' ]; then
+            echo "This is a push event"
+          else
+            echo "This is an unknown event"
           fi
 
       - name: push to docker
