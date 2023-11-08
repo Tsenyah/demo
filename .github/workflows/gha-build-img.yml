@@ -14,8 +14,7 @@ env:
 
   IMAGE_TAG: 1.0.${{github.run_number}}
 
-  BUILD_CONDT: ${{github.event_name}}
-
+  BUILD_CONDT: linux/amd64
 jobs:
 
   build:
@@ -44,28 +43,44 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
       
- 
-      - name: push command run
-        uses: docker/build-push-action@v5
+      - name: Get Github Event type
+        run: |
         if: github.event_name == 'push'
-        with:
-          context: .
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
-        # build when its a pr
-      - name: pr command run
+          ${{env.BUILD_CONDT}} = ${{env.BUILD_CONDT}},linux/arm64
+        
+      
 
+      - name: push to docker
         uses: docker/build-push-action@v5
-        if: github.event_name == 'pull_request'
-       
         with:
-          context: .
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64
-          push: true
-          tags: tomsenyah/dicicd:${{env.IMAGE_TAG}}
+              context: .
+              cache-from: type=gha
+              cache-to: type=gha,mode=max
+              platforms: ${{env.BUILD_CONDT}}
+              push: true
+              tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
+
+      # - name: push command run
+      #   uses: docker/build-push-action@v5
+      #   if: github.event_name == 'push'
+      #   with:
+      #     context: .
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     platforms: linux/amd64,linux/arm64
+      #     push: true
+      #     tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
+        # build when its a pr
+
+      # - name: pr command run
+      #   uses: docker/build-push-action@v5
+      #   if: github.event_name == 'pull_request'
+       
+      #   with:
+      #     context: .
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     platforms: linux/amd64
+      #     push: true
+      #     tags: tomsenyah/dicicd:${{env.IMAGE_TAG}}
         
