@@ -55,10 +55,11 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
-
+        # build when its a pr
       - name: pr command run
+
         uses: docker/build-push-action@v5
-        if: github.event_name == 'Pull-Request'
+        if: github.event_name == 'pull_request'
        
         with:
           context: .
