@@ -45,10 +45,11 @@ jobs:
       
       - name: Get Github Event type
         run: |
-        if: github.event_name == 'push'
-          ${{env.BUILD_CONDT}} = ${{env.BUILD_CONDT}},linux/arm64
-        
-      
+          [if ${{github.event_name}} == 'push']; then
+          ${{env.BUILD_CONDT}} = linux/amd64,linux/arm64
+          elif [${{github.event_name}} == 'pull_request']; then
+          ${{env.BUILD_CONDT}} = linux/amd64,linux/arm64
+          fi
 
       - name: push to docker
         uses: docker/build-push-action@v5
