@@ -48,7 +48,9 @@ jobs:
           if [ ${{ github.event_name }} == 'pull_request' ]; then
             env.BUILD_CONDT="linux/arm64"
           elif [ ${{ github.event_name }} == 'push' ]; then
-            env.BUILD_CONDT=(linux/amd64 linux/arm64)
+            env.BUILD_CONDT="linux/amd64,linux/arm64"
+          elif [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
+            echo "running default cond ${{env.BUILD_CONDT}}"
           else
             echo "This is an unknown event"
           fi
