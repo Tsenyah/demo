@@ -15,6 +15,8 @@ env:
   IMAGE_TAG: 1.0.${{github.run_number}}
 
   BUILD_CONDT: linux/amd64
+  BUILD_CONDT_PR: linux/arm64
+  BUILD_CONDT_PUSH: "linux/arm64,linux/amd64"
 jobs:
 
   build:
@@ -43,25 +45,27 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
       # 
-      - name: Get Github Event type
-        run: |
-          if [ ${{ github.event_name }} == 'pull_request' ]; then
-            env.BUILD_CONDT="linux/arm64"
-          elif [ ${{ github.event_name }} == 'push' ]; then
-            env.BUILD_CONDT="linux/amd64,linux/arm64"
-          elif [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
-            echo "running default cond ${{env.BUILD_CONDT}}"
-          else
-            echo "This is an unknown event"
-          fi
+      # - name: Get Github Event type
+      #   run: |
+      #     if [ ${{ github.event_name }} == 'pull_request' ]; then
+      #       env.BUILD_CONDT="linux/arm64"
+      #     elif [ ${{ github.event_name }} == 'push' ]; then
+      #       env.BUILD_CONDT="linux/amd64,linux/arm64"
+      #     elif [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
+      #       echo "running default cond ${{env.BUILD_CONDT}}"
+      #     else
+      #       echo "This is an unknown event"
+      #     fi
       
+          
+
       - name: push to docker
         uses: docker/build-push-action@v5
         with:
               context: .
               cache-from: type=gha
               cache-to: type=gha,mode=max
-              platforms: ${{env.BUILD_CONDT}}
+              platforms: ${{ github.event_name == 'pull_request' && env.BUILD_CONDT_PR || env.BUILD_CONDT_PUSH}}
               push: true
               tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
 
