@@ -58,7 +58,7 @@ jobs:
         run: |
           docker buildx build \
             --platform ${{ matrix.platform }} \
-            -t your-image-name \
+            -t tomsenyah/dicicd:${{env.IMAGE_TAG}} \
             --file $GITHUB_WORKSPACE/Dockerfile .
             
           
