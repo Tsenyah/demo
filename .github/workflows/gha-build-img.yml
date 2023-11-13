@@ -53,9 +53,9 @@ jobs:
       #     docker buildx stop <builder_name>
       #     docker buildx rm <builder_name>
 
-      # - name: Remove All Existing Builders
-      #   run: |
-      #     docker buildx rm -f
+      - name: Remove All Existing Builders
+        run: |
+          docker buildx rm -f
 
       - name: Set up Docker Buildx
         
