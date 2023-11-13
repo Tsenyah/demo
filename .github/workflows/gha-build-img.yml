@@ -35,34 +35,34 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
 
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
+      # - name: Set up Docker Buildx
+      #   id: buildx
+      #   uses: docker/setup-buildx-action@v1
 
-      - name: Build images for different platforms
-        run: |
-          docker buildx build --platform linux/amd64 -t your-image-name-amd64 .
-          docker buildx build --platform linux/arm64 -t your-image-name-arm64 .
-          docker buildx stop <builder_name>
-          docker buildx rm <builder_name>
+      # - name: Build images for different platforms
+      #   run: |
+      #     docker buildx build --platform linux/amd64 -t your-image-name-amd64 .
+      #     docker buildx build --platform linux/arm64 -t your-image-name-arm64 .
+      #     docker buildx stop <builder_name>
+      #     docker buildx rm <builder_name>
 
           
             
-      - name: Push Docker images
-        run: |
-          docker buildx create --use
-          docker buildx push your-image-name-amd64
-          docker buildx push your-image-name-arm64
+      # - name: Push Docker images
+      #   run: |
+      #     docker buildx create --use
+      #     docker buildx push your-image-name-amd64
+      #     docker buildx push your-image-name-arm64
 
-      - name: Create Manifest List
-        run: |
-          docker buildx create --use
-          docker buildx create manifest \
-            your-image-name \
-            your-image-name-amd64 \
-            your-image-name-arm64
-          docker buildx inspect --bootstrap
-          docker buildx push your-image-name --all
+      # - name: Create Manifest List
+      #   run: |
+      #     docker buildx create --use
+      #     docker buildx create manifest \
+      #       your-image-name \
+      #       your-image-name-amd64 \
+      #       your-image-name-arm64
+      #     docker buildx inspect --bootstrap
+      #     docker buildx push your-image-name --all
 
         # regular docker build
       # - name: docker build
@@ -73,19 +73,19 @@ jobs:
      
      
         #BuildX buuld  
-      # - name: Set up Docker Buildx
-      #   id: buildx
-      #   uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
 
-      # - name: push to docker
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #         context: .
-      #         cache-from: type=gha
-      #         cache-to: type=gha,mode=max
-      #         platforms: ${{ github.event_name == 'pull_request' && env.BUILD_CONDT_PR || env.BUILD_CONDT_PUSH}}
-      #         push: true
-      #         tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
+      - name: push to docker
+        uses: docker/build-push-action@v5
+        with:
+              context: .
+              cache-from: type=gha
+              cache-to: type=gha,mode=max
+              platforms: ${{ github.event_name == 'pull_request' && env.BUILD_CONDT_PR || env.BUILD_CONDT_PUSH}}
+              push: true
+              tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
 
           # conditional build
       # - name: push command run
