@@ -45,8 +45,6 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
-        with: 
-          driver-opts: network=host --builder docker/dockerfile:experimental
 
       # - name: Build images for different platforms
       #   run: |
@@ -55,12 +53,20 @@ jobs:
       #     docker buildx stop <builder_name>
       #     docker buildx rm <builder_name>
 
+      - name: Configure experimental builder
+        run: |
+          docker buildx create --use --name mybuilder
+          export DOCKER_CLI_BUILDKIT=1
+          docker buildx create mybuilder --use --driver-opt network=host --builder docker/dockerfile:experimental
+
+
       - name: Build image
         run: |
           docker buildx build \
             --platform ${{ matrix.platform }} \
             -t tomsenyah/dicicd:${{ github.sha }}${{ matrix.platform }} \
             --file $GITHUB_WORKSPACE/Dockerfile .
+            --push
           
             
       # - name: Push Docker images
