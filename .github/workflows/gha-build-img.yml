@@ -58,10 +58,15 @@ jobs:
       - name: Build image
         run: |
           docker buildx build \
-            --platform ${{ matrix.platform }} \
-            -t tomsenyah/dicicd:${{env.IMAGE_TAG }}\
-            --file $GITHUB_WORKSPACE/Dockerfile .
-            --push tomsenyah/dicicd:${{env.IMAGE_TAG }}
+            --platform linux/amd64,linux/arm64 \
+            -t tomsenyah/dicicd:${{env.IMAGE_TAG }} \
+            --file $GITHUB_WORKSPACE/Dockerfile \
+            .
+      - name: Push Multi-Architecture Image
+        run: |
+          docker buildx inspect mybuilder --bootstrap
+          docker buildx push tomsenyah/dicicd:latest --all
+ 
 
             
       # - name: Push Docker images
