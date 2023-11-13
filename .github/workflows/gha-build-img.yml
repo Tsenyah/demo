@@ -55,7 +55,7 @@ jobs:
 
       - name: Remove All Existing Builders
         run: |
-          docker buildx rm --all
+          docker buildx rm --all-inactive 
 
       - name: Set up Docker Buildx
         run: |
