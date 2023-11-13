@@ -59,18 +59,10 @@ jobs:
         run: |
           docker buildx build \
             --platform ${{ matrix.platform }} \
-            -t tomsenyah/dicicd:${{env.IMAGE_TAG}} \
+            -t tomsenyah/dicicd:${{env.IMAGE_TAG }}\
             --file $GITHUB_WORKSPACE/Dockerfile .
-      
-      
-      - name: Push Docker image for different platforms
-        run: |
-          docker buildx inspect mybuilder --bootstrap
-          docker buildx push tomsenyah/dicicd:${{env.IMAGE_TAG }} --all
+            --push tomsenyah/dicicd:${{env.IMAGE_TAG }}
 
-      - name: Inspect Builder Configuration
-        run: docker buildx inspect mybuilder    
-          
             
       # - name: Push Docker images
       #   run: |
