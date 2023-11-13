@@ -58,7 +58,7 @@ jobs:
         run: |
           docker buildx build \
             --platform ${{ matrix.platform }} \
-            -t tomsenyah/dicicd:${{ github.job }}-${{ matrix.platform }} \
+            -t your-image-name \
             --file $GITHUB_WORKSPACE/Dockerfile .
             --load
           
