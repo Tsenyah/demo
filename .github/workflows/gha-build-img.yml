@@ -55,7 +55,13 @@ jobs:
 
       - name: Set up Docker Buildx
         run: |
+          export DOCKER_CLI_BUILDKIT=1
           docker buildx create --use --name mybuilder --driver-opt network=host --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=mybuilder
+
+      - name: Configure experimental builder (modify existing instance)
+        run: |
+          docker buildx create --use --name mybuilder --append --driver-opt network=host --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=mybuilder
+
 
       - name: Build image
         run: |
