@@ -41,19 +41,17 @@ jobs:
 
       - name: Build images for different platforms
         run: |
-          docker buildx build \
-            --platform linux/amd64 \
-            -t your-image-name-amd64 \
-            --file .
-        
-          docker buildx build \
-            --platform linux/arm64 \
-            -t your-image-name-arm64 \
-            --file .
+          docker buildx build --platform linux/amd64 -t your-image-name-amd64 .
+          docker buildx build --platform linux/arm64 -t your-image-name-arm64 .
+          
+          docker buildx stop <builder_name>
+          docker buildx rm <builder_name>
+
           
             
       - name: Push Docker images
         run: |
+          docker buildx create --use
           docker buildx push your-image-name-amd64
           docker buildx push your-image-name-arm64
 
