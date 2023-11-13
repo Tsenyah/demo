@@ -53,6 +53,10 @@ jobs:
       #     docker buildx stop <builder_name>
       #     docker buildx rm <builder_name>
 
+      - name: Set up Docker Buildx
+        run: |
+          export DOCKER_CLI_BUILDKIT=1
+          docker buildx create --use --name mybuilder --driver-opt network=host --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=mybuilder
 
       - name: Build image
         run: |
