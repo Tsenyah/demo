@@ -41,7 +41,6 @@ jobs:
 
       - name: Build images for different platforms
         run: |
-          docker buildx create --use
           docker buildx build \
             --platform linux/amd64 \
             -t your-image-name-amd64 \
