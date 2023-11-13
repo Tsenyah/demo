@@ -56,7 +56,7 @@ jobs:
       - name: Set up Docker Buildx
         run: |
           export DOCKER_CLI_BUILDKIT=1
-          docker buildx create --use --name mybuilder --driver-opt network=host --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=mybuilder --push
+          docker buildx create --use --name mybuilder --driver-opt network=host --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=mybuilder
 
 
       - name: Build Multi-Architecture Image
@@ -66,7 +66,7 @@ jobs:
             -t tomsenyah/dicicd:${{env.IMAGE_TAG }} \
             --file $GITHUB_WORKSPACE/Dockerfile \
             .
-            
+
       - name: Push Multi-Architecture Image
         run: |
           docker buildx inspect mybuilder --bootstrap
