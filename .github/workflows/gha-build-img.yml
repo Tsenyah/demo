@@ -60,7 +60,7 @@ jobs:
       - name: Set up Docker Buildx
         run: |
           export DOCKER_CLI_BUILDKIT=1
-          docker buildx create --use --name mybuilder --driver-opt network=host --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=mybuilder
+          docker buildx create --use --name TomBuilder --driver-opt network=host --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=TomBuilder
 
 
       - name: Build Multi-Architecture Image
@@ -73,7 +73,7 @@ jobs:
 
       - name: Push Multi-Architecture Image
         run: |
-          docker buildx inspect mybuilder --bootstrap
+          docker buildx inspect TomBuilder --bootstrap
           docker buildx push --platform linux/amd64,linux/arm64 tomsenyah/dicicd:latest
  
 
