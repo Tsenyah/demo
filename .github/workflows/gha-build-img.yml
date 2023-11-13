@@ -60,6 +60,7 @@ jobs:
             --platform ${{ matrix.platform }} \
             -t tomsenyah/dicicd:${{env.IMAGE_TAG}} \
             --file $GITHUB_WORKSPACE/Dockerfile .
+            --push .
             
           
             
