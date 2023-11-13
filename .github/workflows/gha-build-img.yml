@@ -60,7 +60,7 @@ jobs:
             --platform ${{ matrix.platform }} \
             -t tomsenyah/dicicd:${{ github.sha }}${{ matrix.platform }} \
             --file $GITHUB_WORKSPACE/Dockerfile .
-            --push .
+            --load
           
             
       # - name: Push Docker images
