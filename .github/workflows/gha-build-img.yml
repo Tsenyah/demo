@@ -13,8 +13,6 @@ env:
   IMAGE_NAME: tomsenyah/dicicd
 
   IMAGE_TAG: 1.0.${{github.run_number}}
-
-  BUILD_CONDT: linux/amd64
   BUILD_CONDT_PR: linux/arm64
   BUILD_CONDT_PUSH: "linux/arm64,linux/amd64"
 jobs:
@@ -36,25 +34,102 @@ jobs:
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
+
+
+name: GHA BUILD
+# run desctiption
+run-name: trying to build an image using gha
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+  
+
+env:
+  IMAGE_NAME: tomsenyah/dicicd
+
+  IMAGE_TAG: 1.0.${{github.run_number}}
+  BUILD_CONDT_PR: linux/arm64
+  BUILD_CONDT_PUSH: "linux/arm64,linux/amd64"
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      
+      - uses: docker/login-action@v1
+
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build images for different platforms
+        run: |
+          docker buildx create --use
+          docker buildx build \
+            --platform linux/amd64 \
+            -t your-image-name-amd64 \
+            --file .
+        
+          docker buildx build \
+            --platform linux/arm64 \
+            -t your-image-name-arm64 \
+            --file .
+          
+            
+      - name: Push Docker images
+        run: |
+          docker buildx push your-image-name-amd64
+          docker buildx push your-image-name-arm64
+
+      - name: Create Manifest List
+        run: |
+          docker buildx create --use
+          docker buildx create manifest \
+            your-image-name \
+            your-image-name-amd64 \
+            your-image-name-arm64
+          docker buildx inspect --bootstrap
+          docker buildx push your-image-name --all
+
+        # regular docker build
       # - name: docker build
       #   run: docker build . --file Dockerfile --tag tomsenyah/dicicd:${{ github.sha }}
 
       # - name: docker push
       #   run: docker push tomsenyah/dicicd:${{ github.sha }}
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-        
-      - name: push to docker
-        uses: docker/build-push-action@v5
-        with:
-              context: .
-              cache-from: type=gha
-              cache-to: type=gha,mode=max
-              platforms: ${{ github.event_name == 'pull_request' && env.BUILD_CONDT_PR || env.BUILD_CONDT_PUSH}}
-              push: true
-              tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
+     
+     
+        #BuildX buuld  
+      # - name: Set up Docker Buildx
+      #   id: buildx
+      #   uses: docker/setup-buildx-action@v1
 
+      # - name: push to docker
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #         context: .
+      #         cache-from: type=gha
+      #         cache-to: type=gha,mode=max
+      #         platforms: ${{ github.event_name == 'pull_request' && env.BUILD_CONDT_PR || env.BUILD_CONDT_PUSH}}
+      #         push: true
+      #         tags: tomsenyah/dicicd:${{env.IMAGE_TAG }}
+
+          # conditional build
       # - name: push command run
       #   uses: docker/build-push-action@v5
       #   if: github.event_name == 'push'
