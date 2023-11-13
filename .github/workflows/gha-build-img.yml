@@ -1,42 +1,4 @@
-name: GHA BUILD
-# run desctiption
-run-name: trying to build an image using gha
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
-  
-
-env:
-  IMAGE_NAME: tomsenyah/dicicd
-
-  IMAGE_TAG: 1.0.${{github.run_number}}
-  BUILD_CONDT_PR: linux/arm64
-  BUILD_CONDT_PUSH: "linux/arm64,linux/amd64"
-jobs:
-
-  build:
-
-    runs-on: self-hosted
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      
-      - uses: docker/login-action@v1
-
-        with:
-          username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKERHUB_TOKEN}}
-
-
-name: GHA BUILD
+name: github actions demo
 # run desctiption
 run-name: trying to build an image using gha
 on:
