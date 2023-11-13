@@ -61,7 +61,7 @@ jobs:
         
         run: |
           export DOCKER_CLI_BUILDKIT=1
-          docker buildx create --use --name TomBuilder --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=TomBuilder
+          docker buildx create --use --name TomBuilder --buildkitd-flags '--addr tcp://0.0.0.0:1234' --builder docker/dockerfile:experimental --driver-opt env.BUILDKIT_HOST=TomBuilder
 
 
       # - name: Build Multi-Architecture Image
